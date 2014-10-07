@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -44,13 +45,6 @@ public class MainActivity extends ActionBarActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		dialog = new ProgressDialog(this);
 		numeroParrafos = (EditText) findViewById(R.id._EditText);
-		Button myButton2 = (Button)findViewById(R.id.Button_copy);
-		myButton2.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {			
-				ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-			} });
 		Button myButton = (Button)findViewById(R.id.Button_hipster);
 		myButton.setOnClickListener(new OnClickListener() {
 
@@ -62,11 +56,11 @@ public class MainActivity extends ActionBarActivity {
 				dialog.setCancelable(true);
 				new  DownloadUrl().execute(url);
 			} });
-		
+
 		getMenuInflater().inflate(R.menu.main, menu);
 
 		return true;
-		
+
 	}
 
 	@Override
@@ -118,8 +112,18 @@ public class MainActivity extends ActionBarActivity {
 	public void test (String cadena) throws JSONException { 
 		JSONObject cadenaurl = new JSONObject(cadena);
 		String cadenatext = cadenaurl.getString("text");
-		TextView myView = (TextView)findViewById(R.id.Text_Hispter);
+		final TextView myView = (TextView)findViewById(R.id.Text_Hispter);
 		myView.setText(Html.fromHtml(cadenatext));
+		Button myButton2 = (Button)findViewById(R.id.Button_copy);
+		myButton2.setOnClickListener(new OnClickListener() {
+
+			@SuppressWarnings("deprecation")
+			@SuppressLint("NewApi")
+			@Override
+			public void onClick(View v) {			
+				ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE); 
+				clipboard.setText(myView.getText());
+			} });
 	}
 
 }
