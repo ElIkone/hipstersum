@@ -19,6 +19,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -34,28 +36,37 @@ public class MainActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 	}
-ProgressDialog dialog;
-EditText numeroParrafos;
+	ProgressDialog dialog;
+	EditText numeroParrafos;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		dialog = new ProgressDialog(this);
 		numeroParrafos = (EditText) findViewById(R.id._EditText);
-	   Button myButton = (Button)findViewById(R.id.Button_hipster);
-	   myButton.setOnClickListener(new OnClickListener() {
+		Button myButton2 = (Button)findViewById(R.id.Button_copy);
+		myButton2.setOnClickListener(new OnClickListener() {
 
-		@Override
-		public void onClick(View v) {			
-			String myvalue = numeroParrafos.getText().toString();
-			String url = "http://hipsterjesus.com/api/?paras=" + myvalue;
-			dialog.setMessage("Downloading");
-			dialog.setCancelable(true);
-			new  DownloadUrl().execute(url);
-		} });
-		getMenuInflater().inflate(R.menu.main, menu);
+			@Override
+			public void onClick(View v) {			
+				ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+			} });
+		Button myButton = (Button)findViewById(R.id.Button_hipster);
+		myButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {			
+				String myvalue = numeroParrafos.getText().toString();
+				String url = "http://hipsterjesus.com/api/?paras=" + myvalue;
+				dialog.setMessage("Downloading");
+				dialog.setCancelable(true);
+				new  DownloadUrl().execute(url);
+			} });
 		
+		getMenuInflater().inflate(R.menu.main, menu);
+
 		return true;
+		
 	}
 
 	@Override
@@ -79,19 +90,19 @@ EditText numeroParrafos;
 			String result = null;
 			String url = screenNames[0];
 			HttpClient httpclient = new DefaultHttpClient(); 
-            httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
-            HttpGet request = new HttpGet(url);
-            try     { 
-            	
-                HttpResponse response = httpclient.execute(request);
-                HttpEntity resEntity = response.getEntity();
-                result=EntityUtils.toString(resEntity); 
-                } 
-                catch(Exception e1)
-                    {
-                        e1.printStackTrace();
-                    } 
-            return result;
+			httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
+			HttpGet request = new HttpGet(url);
+			try     { 
+
+				HttpResponse response = httpclient.execute(request);
+				HttpEntity resEntity = response.getEntity();
+				result=EntityUtils.toString(resEntity); 
+			} 
+			catch(Exception e1)
+			{
+				e1.printStackTrace();
+			} 
+			return result;
 		}
 		protected void onPostExecute(String result) {
 			dialog.dismiss();
@@ -101,14 +112,14 @@ EditText numeroParrafos;
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 		} 
 	}
-public void test (String cadena) throws JSONException { 
-	JSONObject cadenaurl = new JSONObject(cadena);
-	String cadenatext = cadenaurl.getString("text");
-	 TextView myView = (TextView)findViewById(R.id.Text_Hispter);
-	 myView.setText(Html.fromHtml(cadenatext));
-}
+	public void test (String cadena) throws JSONException { 
+		JSONObject cadenaurl = new JSONObject(cadena);
+		String cadenatext = cadenaurl.getString("text");
+		TextView myView = (TextView)findViewById(R.id.Text_Hispter);
+		myView.setText(Html.fromHtml(cadenatext));
+	}
 
 }
