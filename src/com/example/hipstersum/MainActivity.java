@@ -25,10 +25,12 @@ import android.content.ClipboardManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.view.View.OnClickListener;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -36,30 +38,31 @@ public class MainActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-	}
-	ProgressDialog dialog;
-	EditText numeroParrafos;
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		dialog = new ProgressDialog(this);
 		numeroParrafos = (EditText) findViewById(R.id._EditText);
 		Button myButton = (Button)findViewById(R.id.Button_hipster);
 		myButton.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View v) {			
+			public void onClick(View v) {	
 				String myvalue = numeroParrafos.getText().toString();
 				String url = "http://hipsterjesus.com/api/?paras=" + myvalue;
 				dialog.setMessage("Downloading");
 				dialog.setCancelable(true);
 				new  DownloadUrl().execute(url);
 			} });
+	}
+	ProgressDialog dialog;
+	EditText numeroParrafos;
 
-		getMenuInflater().inflate(R.menu.main, menu);
 
-		return true;
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		return super.onCreateOptionsMenu(menu);
 
 	}
 
